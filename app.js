@@ -1,21 +1,20 @@
 
 import express from "express";
 import dotenv from "dotenv";
+import connectDB from "./config/connectdb.js";
 import cors from "cors";
-import connectDb from "./config/connectdb.js";
-
 
 dotenv.config();
 
-const Database_URL = process.env.DATABASE_URL;
+const app = express();                              //create instance
 const port = process.env.PORT;
-const app = express();                    //create instance
+const DATABASE_URL = process.env.DATABASE_URL;
 
-app.use(cors());                         //CORS policy
-app.use(express.json());
+app.use(express.json());                           //middleware to parse JSON
+app.use(cors());
 
 app.listen(port, () => {
-    console.log(`Server listening at http://localhost:${port}`);   //connect to server
+    console.log(`Server listening to http://localhost:${port}`);      //connect to server
 });
 
-connectDb(Database_URL);                                     //connect to database
+connectDB(DATABASE_URL);                                              //connect to database
