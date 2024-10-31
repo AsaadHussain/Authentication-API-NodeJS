@@ -2,10 +2,11 @@
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
+
     name: {
         type: String,
         required: true,
-        trim: true
+        trim: true                                    //a schema for a users record in DB
     },
     email: {
         type: String,
@@ -20,9 +21,9 @@ const userSchema = new mongoose.Schema({
     tc: {
         type: Boolean,
         required: true
-    }
+    },
 });
 
-const UserModel = mongoose.model("user", userSchema);
+const userModel = mongoose.model("user", userSchema);           //creating a model for that schema
 
-export default UserModel;
+export default userModel;
