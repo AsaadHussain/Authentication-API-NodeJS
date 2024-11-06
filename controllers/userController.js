@@ -70,7 +70,7 @@ class UserController {
                     const isMatch = await bcrypt.compare(password, user.password);
 
                     if ((email === user.email) && isMatch) {
-                        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET_KEY, { expiresIn: '3d' })
+                        const token = jwt.sign({ userID: user._id }, process.env.JWT_SECRET_KEY, { expiresIn: '3d' })
                         res.send({ "status": "Success", "message": "You are Logged In", "token": token });
 
                     } else {
@@ -85,6 +85,32 @@ class UserController {
                 res.send({ "status": "Failed", "message": "All fields are required" });
             }
 
+
+        } catch (error) {
+            res.send({ "status": "Failed", "message": error.message });
+        }
+    };
+
+    static changePassword = async (req, res) => {
+
+        try {
+            const { password, password_confirm } = req.body;
+
+            if (password && password_confirm) {
+
+                if (password === password_confirm) {
+
+                    const hashedPassword = await bcrypt.hash(password, 10);
+                    await userModel.findByIdAndUpdate(req.user._id, { $set: { password: hashedPassword } });
+                    res.send({ "status": "Success", "message": "Password Changed" });
+
+                } else {
+                    res.send({ "status": "Failed", "message": "Password and Confirm Password does not match" });
+                }
+
+            } else {
+                res.send({ "status": "Failed", "message": "All fields are required" });
+            }
 
         } catch (error) {
             res.send({ "status": "Failed", "message": error.message });
